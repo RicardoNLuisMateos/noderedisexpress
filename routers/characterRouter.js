@@ -15,6 +15,7 @@ characterRouter.get("/character", async (req, res) => {
     let data;
 
     const getSaved = await client.get(req.route.path);
+    console.log(getSaved)
     if(getSaved){
         data = JSON.parse(getSaved);
         console.log("OBTENIDO DE REDIS")
@@ -27,7 +28,35 @@ characterRouter.get("/character", async (req, res) => {
         data = response.data;
         console.log("OBTENIDO DE WEB")
     }
+    client.quit();
 
+    res.status(200).json({
+        data: data
+    });
+});
+
+characterRouter.get("/character/:id", async (req, res) => {
+
+    const key = '/character/'+req.params.id;
+    console.log(key)
+    await client.connect();
+
+    let data;
+
+    const getSaved = await client.get(key);
+    if(getSaved){
+        data = JSON.parse(getSaved);
+        console.log("OBTENIDO REDIS");
+    }else{
+        const response = await axios.get(
+            "https://rickandmortyapi.com/api/character/" + req.params.id
+        );
+
+        data = response.data;
+        const saveRedis = await client.set(key, JSON.stringify(response.data))
+        console.log("OBTENIDO WEB");
+    }
+    client.quit();
     res.status(200).json({
         data: data
     });
