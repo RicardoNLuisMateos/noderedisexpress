@@ -5,17 +5,16 @@ const redis = require("redis");
 
 // Connecting to redis
 
-const client = redis.createClient(6379);
+const client = redis.createClient({host:'127.0.0.1',port:6379,username:'',password:'123456rnm'});
 
 
 characterRouter.get("/character", async (req, res) => {
     await client.connect();
-    console.log(req.route.path)
 
     let data;
 
     const getSaved = await client.get(req.route.path);
-    console.log(getSaved)
+
     if(getSaved){
         data = JSON.parse(getSaved);
         console.log("OBTENIDO DE REDIS")
@@ -38,7 +37,7 @@ characterRouter.get("/character", async (req, res) => {
 characterRouter.get("/character/:id", async (req, res) => {
 
     const key = '/character/'+req.params.id;
-    console.log(key)
+    //console.log(key)
     await client.connect();
 
     let data;
@@ -46,7 +45,7 @@ characterRouter.get("/character/:id", async (req, res) => {
     const getSaved = await client.get(key);
     if(getSaved){
         data = JSON.parse(getSaved);
-        console.log("OBTENIDO REDIS");
+        //console.log("OBTENIDO REDIS");
     }else{
         const response = await axios.get(
             "https://rickandmortyapi.com/api/character/" + req.params.id
@@ -54,7 +53,7 @@ characterRouter.get("/character/:id", async (req, res) => {
 
         data = response.data;
         const saveRedis = await client.set(key, JSON.stringify(response.data))
-        console.log("OBTENIDO WEB");
+        //console.log("OBTENIDO WEB");
     }
     client.quit();
     res.status(200).json({
