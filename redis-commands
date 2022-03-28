@@ -1,0 +1,27 @@
+C:\Users\ricar>docker exec -it dockercontainers_redis_1 redis-cli
+127.0.0.1:6379> config get requirepass
+1) "requirepass"
+2) ""
+127.0.0.1:6379> config set requirepass 123456rnm
+OK
+127.0.0.1:6379> config get requirepass
+1) "requirepass"
+2) "123456rnm"
+127.0.0.1:6379> config get maxmemory
+1) "maxmemory"
+2) "0"
+127.0.0.1:6379> config set maxmemory 2000
+OK
+127.0.0.1:6379> config get maxmemory
+1) "maxmemory"
+2) "2000"
+127.0.0.1:6379> config get maxmemory-policy
+1) "maxmemory-policy"
+2) "noeviction"
+127.0.0.1:6379> config set maxmemory-policy volatile-lru
+OK
+127.0.0.1:6379> config get maxmemory-policy
+1) "maxmemory-policy"
+2) "volatile-lru"
+127.0.0.1:6379>
+
