@@ -5,10 +5,11 @@ const redis = require("redis");
 
 // Connecting to redis
 
-const client = redis.createClient({host:'127.0.0.1',port:6379,username:'',password:'123456rnm'});
+const client = redis.createClient({host:'127.0.0.1',port:6379,username:'',password:'123rnm'});
 
 
 characterRouter.get("/character", async (req, res) => {
+    client.on('error', (err) => console.log('Redis Client Error RIACRDO', err));
     await client.connect();
 
     let data;

@@ -1,9 +1,11 @@
-version: '2'
+version: '3.8'
 services:
   redis:
-    image: 'redis'
-    volumes:
-      - './redis_data:/var/lib/redis'
-      - './redis/redis.conf:/usr/local/etc/redis/redis.conf'
+    container_name: redis-test4
+    image: redis:alpine
+    command: redis-server /usr/local/etc/redis/redis.conf --requirepass 123rnm
     ports:
       - '6379:6379'
+    volumes:
+      - './redis/redis.conf:/usr/local/etc/redis/redis.conf'
+      - './redis_data:/data'
